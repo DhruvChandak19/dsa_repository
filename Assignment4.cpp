@@ -1,83 +1,140 @@
 #include <iostream>
 using namespace std;
 
-class Queue
+class Binary
 {
-private:
-    int queue[5];
-    int size;
-    int front;
-    int rear;
+    struct Node
+    {
+        int data;
+        Node *left;
+        Node *right;
+    };
+
+    Node *root;
 
 public:
-    Queue()
+    Binary()
     {
-        size = 5;
-        front = -1;
-        rear = -1;
+        root = NULL;
     }
 
-    void insert(int value)
+    Node* create()
     {
-        if (rear == size - 1)
-        {
-            cout << "\nQueue is Full.\n";
-            return;
-        }
+        int value;
 
-        if (front == -1)
-        {
-            front = 0;
-        }
+        cout << "Enter node value (-1 for no node): ";
+        cin >> value;
 
-        rear++;
-        queue[rear] = value;
-        cout << "\nElement Inserted Successfully.\n";
+        if (value == -1)
+            return NULL;
+
+        Node *newNode = new Node;
+        newNode->data = value;
+
+        cout << "Enter left child of " << value << ": ";
+        newNode->left = create();
+
+        cout << "Enter right child of " << value << ": ";
+        newNode->right = create();
+
+        return newNode;
     }
 
-    void display()
+    void build()
     {
-        if (front == -1)
-        {
-            cout << "Queue is Empty.\n";
-            return;
-        }
+        cout << "\nCreate Binary Tree\n";
+        root = create();
+    }
 
-        cout << "Queue Elements: ";
-        for (int i = front; i <= rear; i++)
-        {
-            cout << queue[i] << " ";
-        }
-        cout << endl;
+    void inorder(Node *temp)
+    {
+        if (temp == NULL)
+            return;
+
+        inorder(temp->left);
+        cout << temp->data << " ";
+        inorder(temp->right);
+    }
+
+    void preorder(Node *temp)
+    {
+        if (temp == NULL)
+            return;
+
+        cout << temp->data << " ";
+        preorder(temp->left);
+        preorder(temp->right);
+    }
+
+    void postorder(Node *temp)
+    {
+        if (temp == NULL)
+            return;
+
+        postorder(temp->left);
+        postorder(temp->right);
+        cout << temp->data << " ";
+    }
+
+    void inorderdisplay()
+    {
+        cout << "\nInorder Traversal:\n";
+        inorder(root);
+    }
+
+    void preorderdisplay()
+    {
+        cout << "\nPreorder Traversal:\n";
+        preorder(root);
+    }
+
+    void postorderdisplay()
+    {
+        cout << "\nPostorder Traversal:\n";
+        postorder(root);
     }
 };
 
 int main()
 {
-    Queue obj;
-    int value;
+    Binary b;
+    int choice;
 
-    cout << "Enter 1st element: ";
-    cin >> value;
-    obj.insert(value);
+    b.build();
 
-    cout << "Enter 2nd element: ";
-    cin >> value;
-    obj.insert(value);
+    do
+    {
+        cout << "\n---- Binary Tree Menu ----";
+        cout << "\n1. Inorder Traversal";
+        cout << "\n2. Preorder Traversal";
+        cout << "\n3. Postorder Traversal";
+        cout << "\n4. Exit";
+        cout << "\nEnter your choice: ";
+        cin >> choice;
 
-    cout << "Enter 3rd element: ";
-    cin >> value;
-    obj.insert(value);
+        switch (choice)
+        {
+        case 1:
+            b.inorderdisplay();
+            break;
 
-    cout << "Enter 4th element: ";
-    cin >> value;
-    obj.insert(value);
+        case 2:
+            b.preorderdisplay();
+            break;
 
-    cout << "Enter 5th element: ";
-    cin >> value;
-    obj.insert(value);
+        case 3:
+            b.postorderdisplay();
+            break;
 
-    obj.display();
+        case 4:
+            cout << "\nExiting...";
+            break;
+
+        default:
+            cout << "\nInvalid Choice!";
+        }
+
+    } while (choice != 4);
 
     return 0;
 }
